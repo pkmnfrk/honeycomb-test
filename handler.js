@@ -23,6 +23,7 @@ async function entry(event, context) {
             name: "delay"
         }, async (span) => {
             await delay(1000);
+            beeline.finishSpan(span);
         })
         
         return {
@@ -33,6 +34,7 @@ async function entry(event, context) {
         }
     } finally {
         beeline.finishTrace(trace);
+        await beeline.flush();
     }
 }
 
