@@ -19,11 +19,13 @@ async function entry(event, context) {
         requestId: context.awsRequestId,
     })
     try {
-        await beeline.withSpan({
+        const span = beeline.startSpan({
             name: "delay"
-        }, async (span) => {
-            await delay(1000);
-        })
+        });
+
+        await delay(1000);
+
+        beeline.finishSpan(span);
         
         return {
             statusCode: 200,
