@@ -1,0 +1,32 @@
+service: honeycomb-test
+
+custom:
+  LIBHONEY_DATASET: x
+  LIBHONEY_API_KEY: x
+
+provider:
+  variableSyntax: "\\${((?!AWS)[ ~:a-zA-Z0-9._'\",\\-\\/\\(\\)]+?)}"
+  name: aws
+  stage: ${opt:stage, "loc"}
+  runtime: nodejs12.x
+  timeout: 120
+  memorySize: 512
+  deploymentBucket: pp-deployment-dev
+  deploymentPrefix: serverless
+  endpointType: REGIONAL
+
+default-env: &default-env
+  LIBHONEY_DATASET: ${self:custom.LIBHONEY_DATASET}
+  LIBHONEY_API_KEY: ${self:custom.LIBHONEY_API_KEY}
+  DEBUG: honeycomb-beeline:*
+
+functions:
+  test:
+    handler: handler.entry
+    events:
+      - http:
+          path: test
+          method: GET
+          private: false
+    environment:
+      <<: *default-env
