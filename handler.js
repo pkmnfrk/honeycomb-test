@@ -6,12 +6,7 @@ beeline({
     serviceName: "honeycomb-test"
 })
 
-function delay(ms) {
-    return new Promise((resolve) => {
-        setTimeout(() => resolve(), ms);
-    })
-}
-
+const complicated = require("./complicated");
 
 async function entry(event, context) {
     const trace = beeline.startTrace({
@@ -19,12 +14,7 @@ async function entry(event, context) {
         requestId: context.awsRequestId,
     })
     try {
-        await beeline.startAsyncSpan({
-            name: "delay"
-        }, async (span) => {
-            await delay(1000);
-            beeline.finishSpan(span);
-        })
+        await complicated.doStuff();
         
         return {
             statusCode: 200,
