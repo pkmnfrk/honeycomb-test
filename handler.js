@@ -19,11 +19,10 @@ async function entry(event, context) {
         requestId: context.awsRequestId,
     })
     try {
-        await beeline.startAsyncSpan({
+        await beeline.withSpan({
             name: "delay"
         }, async (span) => {
             await delay(1000);
-            beeline.finishSpan(span);
         })
         
         return {
